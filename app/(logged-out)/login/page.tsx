@@ -49,7 +49,7 @@ export default function LoginPage () {
 
   return (
     <>
-    <PersonStandingIcon size={50} />
+    <PersonStandingIcon size={50} className="text-pink-600"/>
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login</CardTitle>
