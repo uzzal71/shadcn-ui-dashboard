@@ -6,7 +6,7 @@ export default function LadingPage() {
     return (
         <>
             <h1 className="flex gap-2">
-                <PersonStandingIcon size={50} className="text-pink-500"/>Welcome, SaleSkip!
+                <PersonStandingIcon size={50} className="text-pink-600"/>Welcome, SaleSkip!
             </h1>
             <p className="max-w-md">Skip repetitive and manual sales-marketing task. get highly productive throught automation and save tons of time!</p>
             <div className="flex gap-2 items-center">
