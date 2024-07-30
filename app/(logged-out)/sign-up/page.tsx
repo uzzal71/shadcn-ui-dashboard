@@ -34,12 +34,9 @@ import {
 
 const formSchema = z.object({
   email: z.string().email(),
-  acountType: z.enum(["personal", "company"]),
+  accountType: z.enum(["personal", "company"]),
   companyName: z.string().optional(),
-  employees: z.number().optional(),
-  date_of_birth: z.string(),
-  password: z.string(),
-  confirm_password: z.string(),
+  numberOfEmployees: z.coerce.number().optional(),
 });
 
 export default function SignupPage() {
@@ -49,7 +46,7 @@ export default function SignupPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "",
+      accountType: "personal"
     },
   });
 
@@ -88,61 +85,21 @@ export default function SignupPage() {
 
               <FormField
                 control={form.control}
-                name="acountType"
+                name="accountType"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Account type</FormLabel>
-                    <FormControl>
-                      <Select>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select" />
+                          <SelectValue placeholder="Select an account type" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="personal">Personal</SelectItem>
-                          <SelectItem value="company">Company</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="date_of_birth"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date of birth</FormLabel>
-                    <FormControl></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="••••••••" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="confirm_password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="••••••••" {...field} />
-                    </FormControl>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="personal">Personal</SelectItem>
+                        <SelectItem value="company">Company</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
