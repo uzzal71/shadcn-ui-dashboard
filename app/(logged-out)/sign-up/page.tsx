@@ -24,10 +24,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const formSchema = z.object({
   email: z.string().email(),
+  acountType: z.enum(["personal", "company"]),
+  companyName: z.string().optional(),
+  employees: z.number().optional(),
+  date_of_birth: z.string(),
   password: z.string(),
+  confirm_password: z.string(),
 });
 
 export default function SignupPage() {
@@ -51,7 +63,7 @@ export default function SignupPage() {
       <PersonStandingIcon size={50} className="text-pink-600" />
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Signup</CardTitle>
+          <CardTitle>Sign up</CardTitle>
           <CardDescription>Sign up for a new SalesSkip account</CardDescription>
         </CardHeader>
         <CardContent>
@@ -76,10 +88,58 @@ export default function SignupPage() {
 
               <FormField
                 control={form.control}
+                name="acountType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Account type</FormLabel>
+                    <FormControl>
+                      <Select>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="personal">Personal</SelectItem>
+                          <SelectItem value="company">Company</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="date_of_birth"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Date of birth</FormLabel>
+                    <FormControl></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="••••••••" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="confirm_password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input placeholder="••••••••" {...field} />
                     </FormControl>
