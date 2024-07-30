@@ -48,7 +48,7 @@ export default function SignupPage() {
 
   return (
     <>
-      <PersonStandingIcon size={50} className="text-pink-600"/>
+      <PersonStandingIcon size={50} className="text-pink-600" />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Signup</CardTitle>
@@ -68,6 +68,20 @@ export default function SignupPage() {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input placeholder="john@doe.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="••••••••" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
