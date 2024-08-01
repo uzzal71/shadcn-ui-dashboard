@@ -1,101 +1,111 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { PersonStandingIcon } from "lucide-react";
-import Link from "next/link";
-import * as z from "zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+  CardTitle
+} from '@/components/ui/card'
+import { CalendarIcon, PersonStandingIcon } from 'lucide-react'
+import Link from 'next/link'
+import * as z from 'zod'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+  FormMessage
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue
+} from '@/components/ui/select'
+import { Calendar } from '@/components/ui/calendar'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
+import { format } from 'date-fns'
 
 const formSchema = z
   .object({
     email: z.string().email(),
-    accountType: z.enum(["personal", "company"]),
+    accountType: z.enum(['personal', 'company']),
     companyName: z.string().optional(),
     numberOfEmployees: z.coerce.number().optional(),
     acceptTerms: z
       .boolean({
-        required_error: "You must accept the terms and conditions",
+        required_error: 'You must accept the terms and conditions'
       })
-      .refine((checked) => checked, "You must accept the terms and conditions"),
-    dob: z.date().refine((date) => {
-      const today = new Date();
+      .refine(checked => checked, 'You must accept the terms and conditions'),
+    dob: z.date().refine(date => {
+      const today = new Date()
       const eighteedYearsAgo = new Date(
         today.getFullYear() - 18,
         today.getMonth(),
         today.getDate()
-      );
-      return date <= eighteedYearsAgo;
-    }, "You must be at least 18 years old"),
+      )
+      return date <= eighteedYearsAgo
+    }, 'You must be at least 18 years old')
   })
   .superRefine((data, ctx) => {
-    if (data.accountType === "company" && !data.companyName) {
+    if (data.accountType === 'company' && !data.companyName) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["companyName"],
-        message: "Company name is required",
-      });
+        path: ['companyName'],
+        message: 'Company name is required'
+      })
     }
 
     if (
-      data.accountType === "company" &&
+      data.accountType === 'company' &&
       (!data.numberOfEmployees || data.numberOfEmployees < 1)
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["numberOfEmployees"],
-        message: "Number of employees is required",
-      });
+        path: ['numberOfEmployees'],
+        message: 'Number of employees is required'
+      })
     }
-  });
+  })
 
-export default function SignupPage() {
-  const router = useRouter();
+export default function SignupPage () {
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      accountType: "personal",
-    },
-  });
+      email: '',
+      accountType: 'personal'
+    }
+  })
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("signup validation passed: ", data);
-    router.push("/login");
-  };
+    console.log('signup validation passed: ', data)
+    router.push('/login')
+  }
 
-  const accountType = form.watch("accountType");
+  const accountType = form.watch('accountType');
+
+  const dobFromDate = new Date();
+  dobFromDate.setFullYear(dobFromDate.getFullYear() - 120);
 
   return (
     <>
-      <PersonStandingIcon size={50} className="text-pink-600" />
-      <Card className="w-full max-w-sm">
+      <PersonStandingIcon size={50} className='text-pink-600' />
+      <Card className='w-full max-w-sm'>
         <CardHeader>
           <CardTitle>Sign up</CardTitle>
           <CardDescription>Sign up for a new SalesSkip account</CardDescription>
@@ -103,17 +113,17 @@ export default function SignupPage() {
         <CardContent>
           <Form {...form}>
             <form
-              className="flex flex-col gap-4"
+              className='flex flex-col gap-4'
               onSubmit={form.handleSubmit(handleSubmit)}
             >
               <FormField
                 control={form.control}
-                name="email"
+                name='email'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="john@doe.com" {...field} />
+                      <Input placeholder='john@doe.com' {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -122,19 +132,19 @@ export default function SignupPage() {
 
               <FormField
                 control={form.control}
-                name="accountType"
+                name='accountType'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Account type</FormLabel>
                     <Select onValueChange={field.onChange}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select an account type" />
+                          <SelectValue placeholder='Select an account type' />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="personal">Personal</SelectItem>
-                        <SelectItem value="company">Company</SelectItem>
+                        <SelectItem value='personal'>Personal</SelectItem>
+                        <SelectItem value='company'>Company</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -142,16 +152,16 @@ export default function SignupPage() {
                 )}
               />
 
-              {accountType === "company" && (
+              {accountType === 'company' && (
                 <>
                   <FormField
                     control={form.control}
-                    name="companyName"
+                    name='companyName'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Company name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Company name" {...field} />
+                          <Input placeholder='Company name' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -159,15 +169,15 @@ export default function SignupPage() {
                   />
                   <FormField
                     control={form.control}
-                    name="numberOfEmployees"
+                    name='numberOfEmployees'
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Employees</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
-                            min="0"
-                            placeholder="Employees"
+                            type='number'
+                            min='0'
+                            placeholder='Employees'
                             {...field}
                           />
                         </FormControl>
@@ -177,18 +187,58 @@ export default function SignupPage() {
                   />
                 </>
               )}
-
-              <Button type="submit">Sign up</Button>
+              <FormField
+                control={form.control}
+                name='dob'
+                render={({ field }) => (
+                  <FormItem className='flex flex-col pt-2'>
+                    <FormLabel>Date of birth</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={'outline'}
+                            className='normal-case flex justify-between pr-1'
+                          >
+                            {!!field.value ? (
+                              format(field.value, "P")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className='w-auto p-0' align='start'>
+                        <Calendar
+                          mode='single'
+                          defaultMonth={field.value}
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          fixedWeeks
+                          weekStartsOn={1}
+                          fromDate={dobFromDate}
+                          toDate={new Date()}
+                          captionLayout="dropdown-buttons"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <Button type='submit'>Sign up</Button>
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="justify-between">
+        <CardFooter className='justify-between'>
           <small>Already have an account?</small>
-          <Button asChild variant="outline" size="sm">
-            <Link href="/login">Login</Link>
+          <Button asChild variant='outline' size='sm'>
+            <Link href='/login'>Login</Link>
           </Button>
         </CardFooter>
       </Card>
     </>
-  );
+  )
 }
