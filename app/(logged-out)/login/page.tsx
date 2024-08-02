@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PersonStandingIcon } from "lucide-react";
 import Link from "next/link";
@@ -27,36 +27,35 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string()
+  email: z.string().email(),
+  password: z.string(),
 });
 
-export default function LoginPage () {
-    const router = useRouter();
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
-    });
+export default function LoginPage() {
+  const router = useRouter();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-    const handleSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log("login validation passed");
-        router.push("/dashboard");
-      };
-
+  const handleSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log("login validation passed");
+    router.push("/dashboard");
+  };
 
   return (
     <>
-    <PersonStandingIcon size={50} className="text-pink-600"/>
+      <PersonStandingIcon size={50} />
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login</CardTitle>
-          <CardDescription>Login to your SalesSkip account</CardDescription>
+          <CardDescription>Login to your SupportMe account</CardDescription>
         </CardHeader>
         <CardContent>
-        <Form {...form}>
+          <Form {...form}>
             <form
               className="flex flex-col gap-4"
               onSubmit={form.handleSubmit(handleSubmit)}
@@ -68,10 +67,10 @@ export default function LoginPage () {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="john@salesskip.com" {...field} />
+                      <Input placeholder="example@salesskip.com" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is the email address you signed up to SalesSkip with
+                      This is the email address you signed up to SupportMe with
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -84,7 +83,7 @@ export default function LoginPage () {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="••••••••" {...field} />
+                      <PasswordInput placeholder="••••••••" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -102,5 +101,5 @@ export default function LoginPage () {
         </CardFooter>
       </Card>
     </>
-  )
+  );
 }
